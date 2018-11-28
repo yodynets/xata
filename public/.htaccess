@@ -1,0 +1,33 @@
+#SetEnvIf MM_COUNTRY_CODE CN BlockCountry
+#SetEnvIf MM_COUNTRY_CODE RU BlockCountry
+#SetEnvIf MM_COUNTRY_CODE UA AllowHosts
+SetEnvIf Remote_Addr "10\.14\.88\.66" AllowHosts
+SetEnvIf Remote_Addr "109\.108\.90\.92" AllowHosts
+#SetEnvIf Remote_Addr "217\.66\.103\.41" AllowHosts
+#SetEnvIf Remote_Addr "82\.161\.178\.6" AllowHosts
+
+Order deny,allow
+Deny from all
+Allow from env=AllowHosts
+
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+
+    RewriteEngine On
+
+    # Handle Authorization Header
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # Redirect Trailing Slashes If Not A Folder...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [L,R=301]
+
+    # Handle Front Controller...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+</IfModule>
