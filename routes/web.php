@@ -14,3 +14,11 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Auth::routes();
+
+Route::get('/dash', 'HomeController@index')->name('home');
+
+Route::get('user/{name}', function ($name) {
+	var_dump($name);
+})->where('name', '[A-Za-z]+');
